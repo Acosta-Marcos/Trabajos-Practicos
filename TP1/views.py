@@ -28,15 +28,13 @@ def obtener_un_item(request,id):
         return JsonResponse(items[posicion], safe=False)
 
 @csrf_exempt
-def modificar_un_item(request,id,nombre):
-    if request.method == 'GET':
+def modificar_eliminar_item(request,id):
+    if request.method == 'PATCH':
+        data = json.loads(request.body)
         posicion = next((i for i, dic in enumerate(items) if dic.get("id") == id), None)
-        items[posicion]["nombre"] = nombre
+        items[posicion]["nombre"] = data.get("nombre","sin nombre")
         return JsonResponse(items, safe=False)
-
-@csrf_exempt
-def eliminar_un_item(request,id):
-    if request.method == 'GET':
+    elif request.method == 'DELETE':
         posicion = next((i for i, dic in enumerate(items) if dic.get("id") == id), None)
         items.pop(posicion)
         return JsonResponse(items, safe=False)
